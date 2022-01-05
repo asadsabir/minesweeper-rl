@@ -3,11 +3,8 @@ import math
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-import gym
 from gym import spaces
 from gym import Env
-from stable_baselines3.common.env_checker import check_env
 from stable_baselines3 import PPO
 import time
 start = time.time()
