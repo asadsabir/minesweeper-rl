@@ -1,10 +1,9 @@
 import random
 import math
 import numpy as np
-import matplotlib.pyplot as plt
 from gym import spaces
 from gym import Env
-
+global Progress
 Progress = []
 
 class tile:
@@ -89,19 +88,20 @@ class game(Env):
                 return False
         
         clicked = self.grid[math.floor(action/self.rows)][action%self.columns]
+        
         if clicked.mine or clicked.visible:
             Progress.append(self.move_number)
             self.visible_grid[action] = 10
-            if self.move_number == 1:
+            if self.move_number == 0:
                 return np.array(self.visible_grid).reshape(self.rows,self.columns), 0,True,{}
-            return np.array(self.visible_grid).reshape(self.rows,self.columns), -100,True,{}
+            return np.array(self.visible_grid).reshape(self.rows,self.columns), -1*self.columns*self.rows,True,{}
         else:
             self.move_number +=1
             clicked.visible = True
             self.visible_grid[action] = clicked.value
             if game_won():
                 Progress.append(self.move_number)
-            return np.array(self.visible_grid).reshape(self.rows,self.columns), self.move_number, game_won(),{}
+            return np.array(self.visible_grid).reshape(self.rows,self.columns), 1, game_won(),{}
 
     def render(self):
         pass
