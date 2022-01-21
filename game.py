@@ -4,6 +4,8 @@ import numpy as np
 from gym import spaces
 from gym import Env
 global Progress
+global current_progress
+current_progress = []
 Progress = []
 
 class tile:
@@ -91,6 +93,7 @@ class game(Env):
         
         if clicked.mine or clicked.visible:
             Progress.append(self.move_number)
+            current_progress.append(self.move_number)
             self.visible_grid[action] = 10
             if self.move_number == 0:
                 return np.array(self.visible_grid).reshape(self.rows,self.columns), 0,True,{}
@@ -101,7 +104,8 @@ class game(Env):
             self.visible_grid[action] = clicked.value
             if game_won():
                 Progress.append(self.move_number)
-            return np.array(self.visible_grid).reshape(self.rows,self.columns), 1, game_won(),{}
+                current_progress.append(self.move_number)
+            return np.array(self.visible_grid).reshape(self.rows,self.columns), self.move_number, game_won(),{}
 
     def render(self):
         pass
