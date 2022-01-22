@@ -65,7 +65,7 @@ ani = FuncAnimation(fig,
                     frames=np.linspace(moves,moves*points,points),
                     init_func=init, 
                     blit=False, 
-                    interval=2000) #interval is time between calling update/rendering points
+                    interval=2000) #interval is time (in ms) between calling update/rendering points, you can close graph during this time
 plt.show()
 
 model.save(filep)
