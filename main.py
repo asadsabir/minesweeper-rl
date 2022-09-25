@@ -5,13 +5,13 @@ from game import *
 from stable_baselines3 import PPO
 
 fig, ax = plt.subplots()
-ln, = plt.plot([], [], 'ro')
+ln, = plt.plot([1], [1], 'ro')
 
 columns = 9
 rows = 9
 mines = 10      
 moves = 2e4     # <--- number of moves model trains for each point 
-points = 1     # <--- number of points on graph
+points = int(1e5)     # <--- number of points on graph
 
 
 env = game(columns,rows,mines)
@@ -29,7 +29,7 @@ def init():
     ax.set_xlabel('moves played in 1000s')
     ax.set_xlim(moves/1000, moves*2/1000)
     ax.set_ylim(ymin, ymax)
-    return ln,
+    return ln,ax
 
 def reset_counter():
     global counter
@@ -42,7 +42,7 @@ def update(frame):
 
     model.learn(total_timesteps=moves)
 
-    average = sum(current_progress[counter:])/len(current_progress[counter:])
+    average = np.sum(current_progress[counter:])/len(current_progress[counter:])
 
     xdata.append(frame/1000)
     ydata.append(average)
@@ -58,6 +58,7 @@ def update(frame):
     
     if frame == moves*points:
         plt.close()
+
     return ln,ax
 
 ani = FuncAnimation(fig, 
@@ -65,7 +66,7 @@ ani = FuncAnimation(fig,
                     frames=np.linspace(moves,moves*points,points),
                     init_func=init, 
                     blit=False, 
-                    interval=2000) #interval is time (in ms) between calling update/rendering points, you can close graph during this time
+                    interval = 2000) #interval is time (in ms) between calling update/rendering points, you can close graph during this time
 plt.show()
 
 model.save(filep)
